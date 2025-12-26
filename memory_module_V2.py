@@ -49,8 +49,9 @@ class TitanMLPMemory(nn.Module):
         # layer 1 update
         # delta1 = (e @ W2) * f'(z1)
 
-        sig = torch.sigmoid(z1)
-        silu_prime = sig + z1 * sig * (1 - sig)
+        #SILU derivative. Needs input self.W1(k)
+        sig = torch.sigmoid(self.W1(k))
+        silu_prime = sig + self.W1(k) * sig * (1 - sig)
 
         delta1 = (e @ self.W2.weight) * silu_prime
         #delta1 = (e @ self.W2.weight) * (h1 * (1 - h1))
